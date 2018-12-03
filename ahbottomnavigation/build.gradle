@@ -1,28 +1,14 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
 
-ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'ah-bottom-navigation'
 
-    publishedGroupId = 'com.aurelhubert'
-    libraryName = 'AHBottomNavigation'
-    artifact = 'ahbottomnavigation'
+def siteUrl = 'https://github.com/XiongKe94/ahbottomnavigation' //项目在github主页地址
+def gitUrl = 'https://github.com/XiongKe94/ahbottomnavigation.git'   //Git仓库的地址
 
-    libraryDescription = 'A library to reproduce the behavior of the Bottom Navigation guidelines from Material Design.'
+group = "com.github.xk"//发布aar前缀根节点
 
-    siteUrl = 'https://github.com/aurelhubert/ahbottomnavigation'
-    gitUrl = 'https://github.com/aurelhubert/ahbottomnavigation.git'
-
-    libraryVersion = '2.1.0'
-
-    developerId = 'aurelhubert'
-    developerName = 'Aurelien Hubert'
-    developerEmail = 'aurel.hubert@gmail.com'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
+version = "1.0.0"//发布aar的库版本
 
 android {
     compileSdkVersion 26
@@ -31,8 +17,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 40
-        versionName "2.1.0"
+        versionCode 1
+        versionName "1.0.0"
     }
     buildTypes {
         release {
@@ -40,14 +26,83 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                name '增加跳过设置浮层颜色'//添加项目描述
+                url siteUrl
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'xk'//设置自己ID
+                        name 'xiongke'//设置自己名字
+                        email 'm15117937934@163.com'//设置自己邮箱
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    options.encoding = "utf-8"
+    enabled = false
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        name = "AHBottomNavigation" //项目在JCenter的名字
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
 }
 
 dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:design:26.1.0'
-}
-
-// Place it at the end of the file
-if (project.rootProject.file('local.properties').exists()) {
-    apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-    apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
 }
