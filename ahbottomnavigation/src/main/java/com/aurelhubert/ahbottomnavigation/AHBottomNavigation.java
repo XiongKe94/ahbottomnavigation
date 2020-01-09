@@ -1102,7 +1102,7 @@ public class AHBottomNavigation extends FrameLayout {
 	 *
 	 * @param titleVisible
 	 */
-	public void setTitleVisble(boolean titleVisible) {
+	public void setTitleVisible(boolean titleVisible) {
 		isTitleVisible = titleVisible;
 	}
 
