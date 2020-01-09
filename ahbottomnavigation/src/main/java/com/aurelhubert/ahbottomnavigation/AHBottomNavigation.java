@@ -95,6 +95,7 @@ public class AHBottomNavigation extends FrameLayout {
 	private boolean hideBottomNavigationWithAnimation = false;
 	private boolean soundEffectsEnabled = true;
     private boolean isCoverColor = true;
+	private boolean isTitleVisible = true;
 
 	// Variables (Styles)
 	private Typeface titleTypeface;
@@ -387,8 +388,12 @@ public class AHBottomNavigation extends FrameLayout {
 
 		float activeSize = resources.getDimension(R.dimen.bottom_navigation_text_size_active);
 		float inactiveSize = resources.getDimension(R.dimen.bottom_navigation_text_size_inactive);
-		int activePaddingTop = (int) resources.getDimension(R.dimen.bottom_navigation_margin_top_active);
-
+		int activePaddingTop ;
+		if (isTitleVisible) {
+			activePaddingTop = (int) resources.getDimension(R.dimen.bottom_navigation_margin_top_active);
+		} else {
+			activePaddingTop = AHHelper.dp2px(context, 15);
+		}
 		if (titleActiveTextSize != 0 && titleInactiveTextSize != 0) {
 			activeSize = titleActiveTextSize;
 			inactiveSize = titleInactiveTextSize;
@@ -414,11 +419,17 @@ public class AHBottomNavigation extends FrameLayout {
 			if (titleTypeface != null) {
 				title.setTypeface(titleTypeface);
 			}
+			if (!isTitleVisible){
+				title.setVisibility(GONE);
+				if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+					ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) icon.getLayoutParams();
+					p.setMargins(p.leftMargin, AHHelper.dp2px(context, 16), p.rightMargin, p.bottomMargin);
+				}
+			}
 
 			if (titleState == TitleState.ALWAYS_SHOW && items.size() > MIN_ITEMS) {
 				container.setPadding(0, container.getPaddingTop(), 0, container.getPaddingBottom());
 			}
-
 			if (current) {
 				if (selectedBackgroundVisible) {
 					view.setSelected(true);
@@ -653,8 +664,16 @@ public class AHBottomNavigation extends FrameLayout {
 			if (!selectionAllowed) return;
 		}
 
-		int activeMarginTop = (int) resources.getDimension(R.dimen.bottom_navigation_margin_top_active);
-		int inactiveMarginTop = (int) resources.getDimension(R.dimen.bottom_navigation_margin_top_inactive);
+		int activeMarginTop ;
+		int inactiveMarginTop ;
+		if (isTitleVisible){
+			activeMarginTop = (int) resources.getDimension(R.dimen.bottom_navigation_margin_top_active);
+			inactiveMarginTop = (int) resources.getDimension(R.dimen.bottom_navigation_margin_top_inactive);
+		}else{
+			activeMarginTop = AHHelper.dp2px(context,15);
+			inactiveMarginTop = AHHelper.dp2px(context,16);
+		}
+
 		float activeSize = resources.getDimension(R.dimen.bottom_navigation_text_size_active);
 		float inactiveSize = resources.getDimension(R.dimen.bottom_navigation_text_size_inactive);
 
@@ -1077,6 +1096,15 @@ public class AHBottomNavigation extends FrameLayout {
     public void setCoverColor(boolean coverColor) {
         isCoverColor = coverColor;
     }
+
+	/**
+	 * Whether the title is displayed
+	 *
+	 * @param titleVisible
+	 */
+	public void setTitleVisble(boolean titleVisible) {
+		isTitleVisible = titleVisible;
+	}
 
     /**
 	 * Return the bottom navigation background color
