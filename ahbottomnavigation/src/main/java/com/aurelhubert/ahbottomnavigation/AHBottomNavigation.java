@@ -415,12 +415,12 @@ public class AHBottomNavigation extends FrameLayout {
 
             View view = inflater.inflate(R.layout.bottom_navigation_item, this, false);
             FrameLayout container = view.findViewById(R.id.bottom_navigation_container);
-            ImageView icon =  view.findViewById(R.id.bottom_navigation_item_icon);
-            TextView title =  view.findViewById(R.id.bottom_navigation_item_title);
+            ImageView icon = view.findViewById(R.id.bottom_navigation_item_icon);
+            TextView title = view.findViewById(R.id.bottom_navigation_item_title);
             TextView notification = view.findViewById(R.id.bottom_navigation_notification);
 
             icon.setImageDrawable(item.getDrawable());
-            title.setText(item.getTitle(context));
+            title.setText(item.getTitle());
 
             if (titleTypeface != null) {
                 title.setTypeface(titleTypeface);
@@ -463,8 +463,8 @@ public class AHBottomNavigation extends FrameLayout {
 
             if (colored) {
                 if (current) {
-                    setBackgroundColor(item.getColor(context));
-                    currentColor = item.getColor(context);
+                    setBackgroundColor(item.getColor());
+                    currentColor = item.getColor();
                 }
             } else {
                 if (defaultBackgroundResource != 0) {
@@ -563,7 +563,7 @@ public class AHBottomNavigation extends FrameLayout {
             icon.setImageDrawable(item.getDrawable());
 
             if (titleState != TitleState.ALWAYS_HIDE) {
-                title.setText(item.getTitle(context));
+                title.setText(item.getTitle());
             }
 
             if (titleActiveTextSize != 0) {
@@ -604,8 +604,8 @@ public class AHBottomNavigation extends FrameLayout {
 
             if (colored) {
                 if (i == currentItem) {
-                    setBackgroundColor(item.getColor(context));
-                    currentColor = item.getColor(context);
+                    setBackgroundColor(item.getColor());
+                    currentColor = item.getColor();
                 }
             } else {
                 if (defaultBackgroundResource != 0) {
@@ -721,7 +721,7 @@ public class AHBottomNavigation extends FrameLayout {
 
                     if (circleRevealAnim != null && circleRevealAnim.isRunning()) {
                         circleRevealAnim.cancel();
-                        setBackgroundColor(items.get(itemIndex).getColor(context));
+                        setBackgroundColor(items.get(itemIndex).getColor());
                         backgroundColorView.setBackgroundColor(Color.TRANSPARENT);
                     }
 
@@ -730,12 +730,12 @@ public class AHBottomNavigation extends FrameLayout {
                     circleRevealAnim.addListener(new Animator.AnimatorListener() {
                         @Override
                         public void onAnimationStart(Animator animation) {
-                            backgroundColorView.setBackgroundColor(items.get(itemIndex).getColor(context));
+                            backgroundColorView.setBackgroundColor(items.get(itemIndex).getColor());
                         }
 
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            setBackgroundColor(items.get(itemIndex).getColor(context));
+                            setBackgroundColor(items.get(itemIndex).getColor());
                             backgroundColorView.setBackgroundColor(Color.TRANSPARENT);
                         }
 
@@ -750,7 +750,7 @@ public class AHBottomNavigation extends FrameLayout {
                     circleRevealAnim.start();
                 } else if (colored) {
                     AHHelper.updateViewBackgroundColor(this, currentColor,
-                            items.get(itemIndex).getColor(context));
+                            items.get(itemIndex).getColor());
                 } else {
                     if (defaultBackgroundResource != 0) {
                         setBackgroundResource(defaultBackgroundResource);
@@ -781,7 +781,7 @@ public class AHBottomNavigation extends FrameLayout {
 
         currentItem = itemIndex;
         if (currentItem > 0 && currentItem < items.size()) {
-            currentColor = items.get(currentItem).getColor(context);
+            currentColor = items.get(currentItem).getColor();
         } else if (currentItem == CURRENT_ITEM_NONE) {
             if (defaultBackgroundResource != 0) {
                 setBackgroundResource(defaultBackgroundResource);
@@ -852,7 +852,7 @@ public class AHBottomNavigation extends FrameLayout {
 
                     if (circleRevealAnim != null && circleRevealAnim.isRunning()) {
                         circleRevealAnim.cancel();
-                        setBackgroundColor(items.get(itemIndex).getColor(context));
+                        setBackgroundColor(items.get(itemIndex).getColor());
                         backgroundColorView.setBackgroundColor(Color.TRANSPARENT);
                     }
 
@@ -861,12 +861,12 @@ public class AHBottomNavigation extends FrameLayout {
                     circleRevealAnim.addListener(new Animator.AnimatorListener() {
                         @Override
                         public void onAnimationStart(Animator animation) {
-                            backgroundColorView.setBackgroundColor(items.get(itemIndex).getColor(context));
+                            backgroundColorView.setBackgroundColor(items.get(itemIndex).getColor());
                         }
 
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            setBackgroundColor(items.get(itemIndex).getColor(context));
+                            setBackgroundColor(items.get(itemIndex).getColor());
                             backgroundColorView.setBackgroundColor(Color.TRANSPARENT);
                         }
 
@@ -881,7 +881,7 @@ public class AHBottomNavigation extends FrameLayout {
                     circleRevealAnim.start();
                 } else if (colored) {
                     AHHelper.updateViewBackgroundColor(this, currentColor,
-                            items.get(itemIndex).getColor(context));
+                            items.get(itemIndex).getColor());
                 } else {
                     if (defaultBackgroundResource != 0) {
                         setBackgroundResource(defaultBackgroundResource);
@@ -919,7 +919,7 @@ public class AHBottomNavigation extends FrameLayout {
 
         currentItem = itemIndex;
         if (currentItem > 0 && currentItem < items.size()) {
-            currentColor = items.get(currentItem).getColor(context);
+            currentColor = items.get(currentItem).getColor();
         } else if (currentItem == CURRENT_ITEM_NONE) {
             if (defaultBackgroundResource != 0) {
                 setBackgroundResource(defaultBackgroundResource);

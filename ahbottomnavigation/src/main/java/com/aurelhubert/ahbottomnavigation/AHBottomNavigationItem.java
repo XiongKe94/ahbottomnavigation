@@ -13,45 +13,31 @@ import android.support.annotation.StringRes;
  * The item is display in the AHBottomNavigation layout
  */
 public class AHBottomNavigationItem {
-
     private String title = "";
-
-    @StringRes
-    private int titleRes = 0;
-
     private Drawable drawable;
     @ColorInt
     private int color = Color.GRAY;
 
-    /**
-     * @param title    Title
-     * @param drawable Drawable
-     * @param color    Background color
-     */
-    public AHBottomNavigationItem(@NonNull String title, @Nullable Drawable drawable, @NonNull @ColorInt int color) {
+    public AHBottomNavigationItem(@NonNull String title, @Nullable Drawable drawable) {
         this.title = title;
         this.drawable = drawable;
-        this.color = color;
     }
 
-    public String getTitle(Context context) {
-        if (titleRes != 0) {
-            return context.getString(titleRes);
-        }
+    public AHBottomNavigationItem(@NonNull String title, @Nullable Drawable drawable, @ColorInt int bgAnimColor) {
+        this.title = title;
+        this.drawable = drawable;
+        this.color = bgAnimColor;
+    }
+
+    public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
-        this.titleRes = 0;
     }
 
-    public void setTitle(@StringRes int titleRes) {
-        this.titleRes = titleRes;
-        this.title = "";
-    }
-
-    public int getColor(Context context) {
+    public int getColor() {
         return color;
     }
 

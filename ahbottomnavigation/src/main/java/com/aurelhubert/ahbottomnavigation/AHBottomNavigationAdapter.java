@@ -60,7 +60,7 @@ public class AHBottomNavigationAdapter {
 					AHBottomNavigationItem navigationItem = new AHBottomNavigationItem(String.valueOf(item.getTitle()), item.getIcon(), colors[i]);
 					navigationItems.add(navigationItem);
 				} else {
-					AHBottomNavigationItem navigationItem = new AHBottomNavigationItem(String.valueOf(item.getTitle()), item.getIcon(), Color.GRAY);
+					AHBottomNavigationItem navigationItem = new AHBottomNavigationItem(String.valueOf(item.getTitle()), item.getIcon());
 					navigationItems.add(navigationItem);
 				}
 			}
