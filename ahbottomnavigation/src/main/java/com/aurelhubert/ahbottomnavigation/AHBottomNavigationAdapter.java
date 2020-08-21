@@ -1,6 +1,7 @@
 package com.aurelhubert.ahbottomnavigation;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.annotation.MenuRes;
 import android.support.v7.widget.PopupMenu;
@@ -59,7 +60,7 @@ public class AHBottomNavigationAdapter {
 					AHBottomNavigationItem navigationItem = new AHBottomNavigationItem(String.valueOf(item.getTitle()), item.getIcon(), colors[i]);
 					navigationItems.add(navigationItem);
 				} else {
-					AHBottomNavigationItem navigationItem = new AHBottomNavigationItem(String.valueOf(item.getTitle()), item.getIcon());
+					AHBottomNavigationItem navigationItem = new AHBottomNavigationItem(String.valueOf(item.getTitle()), item.getIcon(), Color.GRAY);
 					navigationItems.add(navigationItem);
 				}
 			}

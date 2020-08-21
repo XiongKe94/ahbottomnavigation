@@ -25,167 +25,173 @@ import java.util.ArrayList;
 
 public class DemoActivity extends AppCompatActivity {
 
-	private DemoFragment currentFragment;
-	private DemoViewPagerAdapter adapter;
-	private AHBottomNavigationAdapter navigationAdapter;
-	private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
-	private boolean useMenuResource = true;
-	private int[] tabColors;
-	private Handler handler = new Handler();
+    private DemoFragment currentFragment;
+    private DemoViewPagerAdapter adapter;
+    private AHBottomNavigationAdapter navigationAdapter;
+    private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
+    private boolean useMenuResource = true;
+    private int[] tabColors;
+    private Handler handler = new Handler();
 
-	// UI
-	private AHBottomNavigationViewPager viewPager;
-	private AHBottomNavigation bottomNavigation;
-	private FloatingActionButton floatingActionButton;
+    // UI
+    private AHBottomNavigationViewPager viewPager;
+    private AHBottomNavigation bottomNavigation;
+    private FloatingActionButton floatingActionButton;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		boolean enabledTranslucentNavigation = getSharedPreferences("shared", Context.MODE_PRIVATE)
-				.getBoolean("translucentNavigation", false);
-		setTheme(enabledTranslucentNavigation ? R.style.AppTheme_TranslucentNavigation : R.style.AppTheme);
-		setContentView(R.layout.activity_home);
-		initUI();
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        boolean enabledTranslucentNavigation = getSharedPreferences("shared", Context.MODE_PRIVATE)
+                .getBoolean("translucentNavigation", false);
+        setTheme(enabledTranslucentNavigation ? R.style.AppTheme_TranslucentNavigation : R.style.AppTheme);
+        setContentView(R.layout.activity_home);
+        initUI();
+    }
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		handler.removeCallbacksAndMessages(null);
-	}
-	
-	/**
-	 * Init UI
-	 */
-	private void initUI() {
-		
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-			AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-		}
-		
-		bottomNavigation = findViewById(R.id.bottom_navigation);
-		viewPager = findViewById(R.id.view_pager);
-		floatingActionButton = findViewById(R.id.floating_action_button);
-		bottomNavigation.setCoverColor(false);
-		if (useMenuResource) {
-			tabColors = getApplicationContext().getResources().getIntArray(R.array.tab_colors);
-			navigationAdapter = new AHBottomNavigationAdapter(this, R.menu.bottom_navigation_menu_3);
-			navigationAdapter.setupWithBottomNavigation(bottomNavigation, tabColors);
-		} else {
-			AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.tab_3, R.drawable.ic_apps_black_24dp, R.color.color_tab_1);
-			AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.tab_2, R.drawable.ic_maps_local_bar, R.color.color_tab_2);
-			AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.tab_3, R.drawable.ic_maps_local_restaurant, R.color.color_tab_3);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+    }
 
-			bottomNavigationItems.add(item1);
-			bottomNavigationItems.add(item2);
-			bottomNavigationItems.add(item3);
+    /**
+     * Init UI
+     */
+    private void initUI() {
 
-			bottomNavigation.addItems(bottomNavigationItems);
-		}
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+        }
 
-		bottomNavigation.manageFloatingActionButtonBehavior(floatingActionButton);
-		bottomNavigation.setTranslucentNavigationEnabled(true);
+        bottomNavigation = findViewById(R.id.bottom_navigation);
+        viewPager = findViewById(R.id.view_pager);
+        floatingActionButton = findViewById(R.id.floating_action_button);
+        bottomNavigation.setCoverColor(true);
+        if (useMenuResource) {
+            tabColors = getApplicationContext().getResources().getIntArray(R.array.tab_colors);
+            navigationAdapter = new AHBottomNavigationAdapter(this, R.menu.bottom_navigation_menu_3);
+            navigationAdapter.setupWithBottomNavigation(bottomNavigation, tabColors);
+        } else {
+            AHBottomNavigationItem item1 = new AHBottomNavigationItem(getString(R.string.tab_3),
+                    ContextCompat.getDrawable(this, R.drawable.ic_apps_black_24dp),
+                    ContextCompat.getColor(this, R.color.color_tab_1));
+            AHBottomNavigationItem item2 = new AHBottomNavigationItem((getString(R.string.tab_2)),
+                    ContextCompat.getDrawable(this, R.drawable.ic_maps_local_bar),
+                    ContextCompat.getColor(this, R.color.color_tab_2));
+            AHBottomNavigationItem item3 = new AHBottomNavigationItem((getString(R.string.tab_3)),
+                    ContextCompat.getDrawable(this, R.drawable.ic_maps_local_restaurant),
+                    ContextCompat.getColor(this, R.color.color_tab_3));
 
-		bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
-			@Override
-			public boolean onTabSelected(int position, boolean wasSelected) {
+            bottomNavigationItems.add(item1);
+            bottomNavigationItems.add(item2);
+            bottomNavigationItems.add(item3);
 
-				if (currentFragment == null) {
-					currentFragment = adapter.getCurrentFragment();
-				}
+            bottomNavigation.addItems(bottomNavigationItems);
+        }
 
-				if (wasSelected) {
-					currentFragment.refresh();
-					return true;
-				}
+        bottomNavigation.manageFloatingActionButtonBehavior(floatingActionButton);
+        bottomNavigation.setTranslucentNavigationEnabled(true);
 
-				if (currentFragment != null) {
-					currentFragment.willBeHidden();
-				}
+        bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
+            @Override
+            public boolean onTabSelected(int position, boolean wasSelected) {
 
-				viewPager.setCurrentItem(position, false);
-				
-				if (currentFragment == null) {
-					return true;
-				}
-				
-				currentFragment = adapter.getCurrentFragment();
-				currentFragment.willBeDisplayed();
+                if (currentFragment == null) {
+                    currentFragment = adapter.getCurrentFragment();
+                }
 
-				if (position == 1) {
-					bottomNavigation.setNotification("", 1);
+                if (wasSelected) {
+                    currentFragment.refresh();
+                    return true;
+                }
 
-					floatingActionButton.setVisibility(View.VISIBLE);
-					floatingActionButton.setAlpha(0f);
-					floatingActionButton.setScaleX(0f);
-					floatingActionButton.setScaleY(0f);
-					floatingActionButton.animate()
-							.alpha(1)
-							.scaleX(1)
-							.scaleY(1)
-							.setDuration(300)
-							.setInterpolator(new OvershootInterpolator())
-							.setListener(new Animator.AnimatorListener() {
-								@Override
-								public void onAnimationStart(Animator animation) {
+                if (currentFragment != null) {
+                    currentFragment.willBeHidden();
+                }
 
-								}
+                viewPager.setCurrentItem(position, false);
 
-								@Override
-								public void onAnimationEnd(Animator animation) {
-									floatingActionButton.animate()
-											.setInterpolator(new LinearOutSlowInInterpolator())
-											.start();
-								}
+                if (currentFragment == null) {
+                    return true;
+                }
 
-								@Override
-								public void onAnimationCancel(Animator animation) {
+                currentFragment = adapter.getCurrentFragment();
+                currentFragment.willBeDisplayed();
 
-								}
+                if (position == 1) {
+                    bottomNavigation.setNotification("", 1);
 
-								@Override
-								public void onAnimationRepeat(Animator animation) {
+                    floatingActionButton.setVisibility(View.VISIBLE);
+                    floatingActionButton.setAlpha(0f);
+                    floatingActionButton.setScaleX(0f);
+                    floatingActionButton.setScaleY(0f);
+                    floatingActionButton.animate()
+                            .alpha(1)
+                            .scaleX(1)
+                            .scaleY(1)
+                            .setDuration(300)
+                            .setInterpolator(new OvershootInterpolator())
+                            .setListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {
 
-								}
-							})
-							.start();
+                                }
 
-				} else {
-					if (floatingActionButton.getVisibility() == View.VISIBLE) {
-						floatingActionButton.animate()
-								.alpha(0)
-								.scaleX(0)
-								.scaleY(0)
-								.setDuration(300)
-								.setInterpolator(new LinearOutSlowInInterpolator())
-								.setListener(new Animator.AnimatorListener() {
-									@Override
-									public void onAnimationStart(Animator animation) {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    floatingActionButton.animate()
+                                            .setInterpolator(new LinearOutSlowInInterpolator())
+                                            .start();
+                                }
 
-									}
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
 
-									@Override
-									public void onAnimationEnd(Animator animation) {
-										floatingActionButton.setVisibility(View.GONE);
-									}
+                                }
 
-									@Override
-									public void onAnimationCancel(Animator animation) {
-										floatingActionButton.setVisibility(View.GONE);
-									}
+                                @Override
+                                public void onAnimationRepeat(Animator animation) {
 
-									@Override
-									public void onAnimationRepeat(Animator animation) {
+                                }
+                            })
+                            .start();
 
-									}
-								})
-								.start();
-					}
-				}
+                } else {
+                    if (floatingActionButton.getVisibility() == View.VISIBLE) {
+                        floatingActionButton.animate()
+                                .alpha(0)
+                                .scaleX(0)
+                                .scaleY(0)
+                                .setDuration(300)
+                                .setInterpolator(new LinearOutSlowInInterpolator())
+                                .setListener(new Animator.AnimatorListener() {
+                                    @Override
+                                    public void onAnimationStart(Animator animation) {
 
-				return true;
-			}
-		});
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        floatingActionButton.setVisibility(View.GONE);
+                                    }
+
+                                    @Override
+                                    public void onAnimationCancel(Animator animation) {
+                                        floatingActionButton.setVisibility(View.GONE);
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animator animation) {
+
+                                    }
+                                })
+                                .start();
+                    }
+                }
+
+                return true;
+            }
+        });
 		
 		/*
 		bottomNavigation.setOnNavigationPositionListener(new AHBottomNavigation.OnNavigationPositionListener() {
@@ -195,117 +201,117 @@ public class DemoActivity extends AppCompatActivity {
 		});
 		*/
 
-		viewPager.setOffscreenPageLimit(4);
-		adapter = new DemoViewPagerAdapter(getSupportFragmentManager());
-		viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(4);
+        adapter = new DemoViewPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
 
-		currentFragment = adapter.getCurrentFragment();
+        currentFragment = adapter.getCurrentFragment();
 
-		handler.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				// Setting custom colors for notification
-				AHNotification notification = new AHNotification.Builder()
-						.setText(":)")
-						.setBackgroundColor(ContextCompat.getColor(DemoActivity.this, R.color.color_notification_back))
-						.setTextColor(ContextCompat.getColor(DemoActivity.this, R.color.color_notification_text))
-						.build();
-				bottomNavigation.setNotification(notification, 1);
-				Snackbar.make(bottomNavigation, "Snackbar with bottom navigation",
-						Snackbar.LENGTH_SHORT).show();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Setting custom colors for notification
+                AHNotification notification = new AHNotification.Builder()
+                        .setText(":)")
+                        .setBackgroundColor(ContextCompat.getColor(DemoActivity.this, R.color.color_notification_back))
+                        .setTextColor(ContextCompat.getColor(DemoActivity.this, R.color.color_notification_text))
+                        .build();
+                bottomNavigation.setNotification(notification, 1);
+                Snackbar.make(bottomNavigation, "Snackbar with bottom navigation",
+                        Snackbar.LENGTH_SHORT).show();
 
-			}
-		}, 3000);
-		
-		//bottomNavigation.setDefaultBackgroundResource(R.drawable.bottom_navigation_background);
-	}
+            }
+        }, 3000);
 
-	/**
-	 * Update the bottom navigation colored param
-	 */
-	public void updateBottomNavigationColor(boolean isColored) {
-		bottomNavigation.setColored(isColored);
-	}
+        //bottomNavigation.setDefaultBackgroundResource(R.drawable.bottom_navigation_background);
+    }
 
-	/**
-	 * Return if the bottom navigation is colored
-	 */
-	public boolean isBottomNavigationColored() {
-		return bottomNavigation.isColored();
-	}
+    /**
+     * Update the bottom navigation colored param
+     */
+    public void updateBottomNavigationColor(boolean isColored) {
+        bottomNavigation.setColored(isColored);
+    }
 
-	/**
-	 * Add or remove items of the bottom navigation
-	 */
-	public void updateBottomNavigationItems(boolean addItems) {
+    /**
+     * Return if the bottom navigation is colored
+     */
+    public boolean isBottomNavigationColored() {
+        return bottomNavigation.isColored();
+    }
 
-		if (useMenuResource) {
-			if (addItems) {
-				navigationAdapter = new AHBottomNavigationAdapter(this, R.menu.bottom_navigation_menu_5);
-				navigationAdapter.setupWithBottomNavigation(bottomNavigation, tabColors);
-				bottomNavigation.setNotification("1", 3);
-			} else {
-				navigationAdapter = new AHBottomNavigationAdapter(this, R.menu.bottom_navigation_menu_3);
-				navigationAdapter.setupWithBottomNavigation(bottomNavigation, tabColors);
-			}
+    /**
+     * Add or remove items of the bottom navigation
+     */
+    public void updateBottomNavigationItems(boolean addItems) {
 
-		} else {
-			if (addItems) {
-				AHBottomNavigationItem item4 = new AHBottomNavigationItem(getString(R.string.tab_4),
-						ContextCompat.getDrawable(this, R.drawable.ic_maps_local_bar),
-						ContextCompat.getColor(this, R.color.color_tab_4));
-				AHBottomNavigationItem item5 = new AHBottomNavigationItem(getString(R.string.tab_5),
-						ContextCompat.getDrawable(this, R.drawable.ic_maps_place),
-						ContextCompat.getColor(this, R.color.color_tab_5));
+        if (useMenuResource) {
+            if (addItems) {
+                navigationAdapter = new AHBottomNavigationAdapter(this, R.menu.bottom_navigation_menu_5);
+                navigationAdapter.setupWithBottomNavigation(bottomNavigation, tabColors);
+                bottomNavigation.setNotification("1", 3);
+            } else {
+                navigationAdapter = new AHBottomNavigationAdapter(this, R.menu.bottom_navigation_menu_3);
+                navigationAdapter.setupWithBottomNavigation(bottomNavigation, tabColors);
+            }
 
-				bottomNavigation.addItem(item4);
-				bottomNavigation.addItem(item5);
-				bottomNavigation.setNotification("1", 3);
-			} else {
-				bottomNavigation.removeAllItems();
-				bottomNavigation.addItems(bottomNavigationItems);
-			}
-		}
-	}
+        } else {
+            if (addItems) {
+                AHBottomNavigationItem item4 = new AHBottomNavigationItem(getString(R.string.tab_4),
+                        ContextCompat.getDrawable(this, R.drawable.ic_maps_local_bar),
+                        ContextCompat.getColor(this, R.color.color_tab_4));
+                AHBottomNavigationItem item5 = new AHBottomNavigationItem(getString(R.string.tab_5),
+                        ContextCompat.getDrawable(this, R.drawable.ic_maps_place),
+                        ContextCompat.getColor(this, R.color.color_tab_5));
 
-	/**
-	 * Show or hide the bottom navigation with animation
-	 */
-	public void showOrHideBottomNavigation(boolean show) {
-		if (show) {
-			bottomNavigation.restoreBottomNavigation(true);
-		} else {
-			bottomNavigation.hideBottomNavigation(true);
-		}
-	}
+                bottomNavigation.addItem(item4);
+                bottomNavigation.addItem(item5);
+                bottomNavigation.setNotification("1", 3);
+            } else {
+                bottomNavigation.removeAllItems();
+                bottomNavigation.addItems(bottomNavigationItems);
+            }
+        }
+    }
 
-	/**
-	 * Show or hide selected item background
-	 */
-	public void updateSelectedBackgroundVisibility(boolean isVisible) {
-		bottomNavigation.setSelectedBackgroundVisible(isVisible);
-	}
+    /**
+     * Show or hide the bottom navigation with animation
+     */
+    public void showOrHideBottomNavigation(boolean show) {
+        if (show) {
+            bottomNavigation.restoreBottomNavigation(true);
+        } else {
+            bottomNavigation.hideBottomNavigation(true);
+        }
+    }
 
-	/**
-	 * Set title state for bottomNavigation
-	 */
-	public void setTitleState(AHBottomNavigation.TitleState titleState) {
-		bottomNavigation.setTitleState(titleState);
-	}
+    /**
+     * Show or hide selected item background
+     */
+    public void updateSelectedBackgroundVisibility(boolean isVisible) {
+        bottomNavigation.setSelectedBackgroundVisible(isVisible);
+    }
 
-	/**
-	 * Reload activity
-	 */
-	public void reload() {
-		startActivity(new Intent(this, DemoActivity.class));
-		finish();
-	}
+    /**
+     * Set title state for bottomNavigation
+     */
+    public void setTitleState(AHBottomNavigation.TitleState titleState) {
+        bottomNavigation.setTitleState(titleState);
+    }
 
-	/**
-	 * Return the number of items in the bottom navigation
-	 */
-	public int getBottomNavigationNbItems() {
-		return bottomNavigation.getItemsCount();
-	}
+    /**
+     * Reload activity
+     */
+    public void reload() {
+        startActivity(new Intent(this, DemoActivity.class));
+        finish();
+    }
+
+    /**
+     * Return the number of items in the bottom navigation
+     */
+    public int getBottomNavigationNbItems() {
+        return bottomNavigation.getItemsCount();
+    }
 
 }
