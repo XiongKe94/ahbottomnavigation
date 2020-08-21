@@ -1,12 +1,10 @@
 package com.aurelhubert.ahbottomnavigation;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 
 /**
  * AHBottomNavigationItem
@@ -14,18 +12,19 @@ import android.support.annotation.StringRes;
  */
 public class AHBottomNavigationItem {
     private String title = "";
-    private Drawable drawable;
+    private Drawable checkDrawable;
+    private Drawable unCheckDrawable;
     @ColorInt
     private int color = Color.GRAY;
 
-    public AHBottomNavigationItem(@NonNull String title, @Nullable Drawable drawable) {
+    public AHBottomNavigationItem(@NonNull String title, @Nullable Drawable checkDrawable) {
         this.title = title;
-        this.drawable = drawable;
+        this.checkDrawable = checkDrawable;
     }
 
-    public AHBottomNavigationItem(@NonNull String title, @Nullable Drawable drawable, @ColorInt int bgAnimColor) {
+    public AHBottomNavigationItem(@NonNull String title, @Nullable Drawable checkDrawable, @ColorInt int bgAnimColor) {
         this.title = title;
-        this.drawable = drawable;
+        this.checkDrawable = checkDrawable;
         this.color = bgAnimColor;
     }
 
@@ -45,12 +44,28 @@ public class AHBottomNavigationItem {
         this.color = color;
     }
 
-    public void setDrawable(Drawable drawable) {
-        this.drawable = drawable;
+    public void setCheckDrawable(Drawable checkDrawable) {
+        this.checkDrawable = checkDrawable;
+    }
+
+    public void setUnCheckDrawable(Drawable unCheckDrawable) {
+        this.unCheckDrawable = unCheckDrawable;
+    }
+
+    public Drawable getUnCheckDrawable() {
+        return unCheckDrawable;
     }
 
     @Nullable
-    public Drawable getDrawable() {
-        return drawable;
+    public Drawable getCheckDrawable() {
+        return checkDrawable;
+    }
+
+    @Nullable
+    public Drawable getDefaultDrawable() {
+        if (unCheckDrawable != null) {
+            return unCheckDrawable;
+        }
+        return checkDrawable;
     }
 }

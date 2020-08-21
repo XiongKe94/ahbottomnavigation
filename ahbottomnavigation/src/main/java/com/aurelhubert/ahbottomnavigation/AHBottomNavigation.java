@@ -419,7 +419,7 @@ public class AHBottomNavigation extends FrameLayout {
             TextView title = view.findViewById(R.id.bottom_navigation_item_title);
             TextView notification = view.findViewById(R.id.bottom_navigation_notification);
 
-            icon.setImageDrawable(item.getDrawable());
+            icon.setImageDrawable(item.getDefaultDrawable());
             title.setText(item.getTitle());
 
             if (titleTypeface != null) {
@@ -501,7 +501,7 @@ public class AHBottomNavigation extends FrameLayout {
 
     @Nullable
     private Drawable getCurrentDrawable(int position, boolean current) {
-        Drawable drawable = items.get(position).getDrawable();
+        Drawable drawable = items.get(position).getCheckDrawable();
         if (isCoverColor && drawable != null) {
             AHHelper.getTintDrawable(drawable, current ? itemActiveColor : itemInactiveColor, forceTint);
         }
@@ -510,7 +510,7 @@ public class AHBottomNavigation extends FrameLayout {
 
     @Nullable
     private Drawable getEnabledDrawable(int position) {
-        Drawable drawable = items.get(position).getDrawable();
+        Drawable drawable = items.get(position).getDefaultDrawable();
         if (isCoverColor && drawable != null) {
             AHHelper.getTintDrawable(drawable, itemDisableColor, forceTint);
         }
@@ -560,7 +560,7 @@ public class AHBottomNavigation extends FrameLayout {
             ImageView icon = (ImageView) view.findViewById(R.id.bottom_navigation_small_item_icon);
             TextView title = (TextView) view.findViewById(R.id.bottom_navigation_small_item_title);
             TextView notification = (TextView) view.findViewById(R.id.bottom_navigation_notification);
-            icon.setImageDrawable(item.getDrawable());
+            icon.setImageDrawable(item.getDefaultDrawable());
 
             if (titleState != TitleState.ALWAYS_HIDE) {
                 title.setText(item.getTitle());
@@ -707,7 +707,7 @@ public class AHBottomNavigation extends FrameLayout {
                 AHHelper.updateLeftMargin(notification, notificationInactiveMarginLeft, notificationActiveMarginLeft);
                 AHHelper.updateTextColor(title, itemInactiveColor, itemActiveColor);
                 AHHelper.updateTextSize(title, inactiveSize, activeSize);
-                Drawable itemDraw = items.get(itemIndex).getDrawable();
+                Drawable itemDraw = items.get(itemIndex).getDefaultDrawable();
                 if (isCoverColor && itemDraw != null) {
                     AHHelper.updateDrawableColor(context, itemDraw, icon,
                             itemInactiveColor, itemActiveColor, forceTint);
@@ -771,7 +771,7 @@ public class AHBottomNavigation extends FrameLayout {
                 AHHelper.updateLeftMargin(notification, notificationActiveMarginLeft, notificationInactiveMarginLeft);
                 AHHelper.updateTextColor(title, itemActiveColor, itemInactiveColor);
                 AHHelper.updateTextSize(title, activeSize, inactiveSize);
-                Drawable itemDraw = items.get(currentItem).getDrawable();
+                Drawable itemDraw = items.get(currentItem).getDefaultDrawable();
                 if (isCoverColor && itemDraw != null) {
                     AHHelper.updateDrawableColor(context, itemDraw, icon,
                             itemActiveColor, itemInactiveColor, forceTint);
@@ -840,7 +840,7 @@ public class AHBottomNavigation extends FrameLayout {
                 }
 
                 AHHelper.updateAlpha(title, 0, 1);
-                Drawable itemDraw = items.get(itemIndex).getDrawable();
+                Drawable itemDraw = items.get(itemIndex).getDefaultDrawable();
                 if (isCoverColor && itemDraw != null) {
                     AHHelper.updateDrawableColor(context, itemDraw, icon,
                             itemInactiveColor, itemActiveColor, forceTint);
@@ -909,7 +909,7 @@ public class AHBottomNavigation extends FrameLayout {
                 }
 
                 AHHelper.updateAlpha(title, 1, 0);
-                Drawable itemDraw = items.get(currentItem).getDrawable();
+                Drawable itemDraw = items.get(currentItem).getDefaultDrawable();
                 if (isCoverColor && itemDraw != null) {
                     AHHelper.updateDrawableColor(context, itemDraw, icon,
                             itemActiveColor, itemInactiveColor, forceTint);
