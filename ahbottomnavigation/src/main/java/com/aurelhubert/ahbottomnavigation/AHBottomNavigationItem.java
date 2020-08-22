@@ -20,11 +20,13 @@ public class AHBottomNavigationItem {
     public AHBottomNavigationItem(@NonNull String title, @Nullable Drawable checkDrawable) {
         this.title = title;
         this.checkDrawable = checkDrawable;
+        this.unCheckDrawable = checkDrawable;
     }
 
     public AHBottomNavigationItem(@NonNull String title, @Nullable Drawable checkDrawable, @ColorInt int bgAnimColor) {
         this.title = title;
         this.checkDrawable = checkDrawable;
+        this.unCheckDrawable = checkDrawable;
         this.color = bgAnimColor;
     }
 
@@ -56,16 +58,7 @@ public class AHBottomNavigationItem {
         return unCheckDrawable;
     }
 
-    @Nullable
     public Drawable getCheckDrawable() {
-        return checkDrawable;
-    }
-
-    @Nullable
-    public Drawable getDefaultDrawable() {
-        if (unCheckDrawable != null) {
-            return unCheckDrawable;
-        }
         return checkDrawable;
     }
 }
